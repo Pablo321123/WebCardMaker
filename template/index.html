@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Exemplo de texto em cima de imagem</title>
+  <meta charset="UTF-8">
+</head>
+
+<body>
+  <div class="imgTemplate">
+    <canvas id="myCanvas"></canvas>
+  </div>
+  <button id="btnImgDowload"> <a id="imagePreview" href="">Download</a></button>
+  <script>
+
+    // Obtendo uma referência para o botão pelo id
+    const btn = document.getElementById('btnImgDowload');
+    var canvas = document.getElementById('myCanvas');
+
+    // Carrega a imagem
+    var img = new Image();
+    img.src = 'CR7.jpg';
+
+    img.onload = function () {
+      // Cria o canvas
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext('2d');
+      // Desenha a imagem
+      ctx.drawImage(img, 0, 0);
+      // Adiciona o texto
+      ctx.font = '30px Arial';
+      ctx.fillStyle = 'white';
+      ctx.fillText('CR7 BESTA ENJAULADA', 10, 50);
+    };
+ 
+    // Adicionando um ouvinte de evento de clique ao botão
+    btn.addEventListener('click', function () {
+      // Faz o download da imagem
+      console.log(canvas)
+      var link = document.getElementById('imagePreview');
+      link.download = canvas.toDataURL('image/jpeg');
+      link.href = canvas.toDataURL('image/jpeg')
+      link.click()
+    });
+
+
+
+  </script>
+</body>
+
+</html>
