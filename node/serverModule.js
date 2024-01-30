@@ -6,6 +6,7 @@ const cors = require('cors');
 
 const templateFiles = path.join(__dirname, '../template')
 const imgFiles = path.join(__dirname, '../src/img')
+const fontFiles = path.join(__dirname, '../fonts/')
 
 const defaultPort = 8088
 
@@ -14,6 +15,7 @@ const app = express()
 app.use(cors());
 app.use(express.static(templateFiles))
 app.use(express.static(imgFiles))
+app.use(express.static(fontFiles))
 
 //Permissões para permitir a comunicação entre portas
 app.use((req, res, next) => {

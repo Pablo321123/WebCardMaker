@@ -2,50 +2,117 @@
 <html>
 
 <head>
-  <title>Exemplo de texto em cima de imagem</title>
+  <title>Naruto Card Maker </title>
   <meta charset="UTF-8">
+  <link rel="icon" href="vilas/leaf.png" type="image/png">
 </head>
 
 <body>
   <div class="imgTemplate">
-    <canvas id="myCanvas"></canvas>
+    <canvas id="myCanvas" style="width: 343px; height: 500px;">
   </div>
-  <button id="btnImgDowload"> <a id="imagePreview" href="">Download</a></button>
+  <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
+  <input type="text" name="" id="title-card">
+
+  <input type="text" name="" id="subtitle-card">
+
   <script>
 
     // Obtendo uma referência para o botão pelo id
-    const btn = document.getElementById('btnImgDowload');
+    const titleText = document.getElementById('title-card')
+    const subtitleText = document.getElementById('subtitle-card')
+    const btnDowload = document.getElementById('btnImgDowload');
+    const btnUpdateText = document.getElementById('btnAtualizaTexto');
     var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d', { alpha: true });
 
     // Carrega a imagem
     var img = new Image();
-    img.src = 'CR7.jpg';
-
+    img.src = 'BGCard.png';
     img.onload = function () {
-      // Cria o canvas
-
-      canvas.width = img.width;
-      canvas.height = img.height;
-      var ctx = canvas.getContext('2d');
-      // Desenha a imagem
-      ctx.drawImage(img, 0, 0);
-      // Adiciona o texto
-      ctx.font = '30px Arial';
-      ctx.fillStyle = 'white';
-      ctx.fillText('CR7 BESTA ENJAULADA', 10, 50);
+      loadBGImage()
     };
- 
+
+    var upLine = new Image()
+    upLine.src = 'lines/faixa_de_cima.png'
+
+    var downLine = new Image()
+    downLine.src = 'lines/faixa_de_baixo.png'
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const x = canvas.width / 2
+    const y = canvas.height / 2
+
+    function loadBGImage() {
+      // Cria o canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(img, 0, 0);
+      drawLines()
+    }
+
+    function drawLines() {
+      ctx.drawImage(upLine, (upLine.width - x) / 4, y + 110)
+      console.log('Desenhando linha de cima...')
+
+      /*ctx.strokeStyle = "#8d313d";
+          ctx.moveTo(70, y + 110);
+          ctx.lineTo((x * 2) - 70, y + 110);
+          ctx.stroke();*/
+    }
+
+    function writeInCanva() {
+      const AlenconDemo = new FontFace('AlenconDemoFamily', 'url(Allencon_Demo/Allencon-Demo.woff)')
+      const TrebuchetMS = new FontFace('TrebuchetMSFamily', 'url(Trebuchet_MS/trebuc.woff)')
+
+      document.fonts.add(AlenconDemo)
+      document.fonts.add(TrebuchetMS)
+
+      loadBGImage()
+      AlenconDemo.load().then(
+        () => {
+          console.log(`AlenconDemoFamily: ${AlenconDemo.status}`)
+
+          ctx.font = '70px AlenconDemoFamily'
+          ctx.fillStyle = 'black';
+          ctx.textAlign = "center"
+          ctx.fillText(titleText.value, x, y + 90);
+
+        }, (err) => {
+          console.error(err);
+        })
+
+      TrebuchetMS.load().then(
+        () => {
+          console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
+          ctx.font = '600 20px TrebuchetMSFamily'
+          ctx.fillStyle = '#8d313d'
+          ctx.textAlign = "left"
+          ctx.fillText(subtitleText.value, 70, y + 131);
+        }, (err) => {
+          console.error(err);
+        })
+    }
+
     // Adicionando um ouvinte de evento de clique ao botão
-    btn.addEventListener('click', function () {
+    btnDowload.addEventListener('click', function () {
       // Faz o download da imagem
-      console.log(canvas)
+      console.log(titleText.value)
       var link = document.getElementById('imagePreview');
       link.download = canvas.toDataURL('image/jpeg');
-      link.href = canvas.toDataURL('image/jpeg')
+      link.href = link.download
       link.click()
+
     });
 
+    titleText.addEventListener('input', function () {
+      writeInCanva()
+    });
 
+    subtitleText.addEventListener('input', () => {
+      writeInCanva()
+    });
 
   </script>
 </body>
