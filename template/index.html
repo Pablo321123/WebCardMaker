@@ -4,7 +4,7 @@
 <head>
   <title>Naruto Card Maker </title>
   <meta charset="UTF-8">
-  <link rel="icon" href="vilas/leaf.png" type="image/png">
+  <link rel="icon" href="villages/leaf.png" type="image/png">
 </head>
 
 <body>
@@ -12,17 +12,56 @@
     <canvas id="myCanvas" style="width: 343px; height: 500px;">
   </div>
   <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
-  <input type="text" name="" id="title-card">
 
+  <input type="text" name="" id="title-card">
   <input type="text" name="" id="subtitle-card">
+  <input type="text" name="" id="level-card">
+
+  <div class="card-types">
+    <select name="" id="select-type-card">
+      <option value="shinobi">Ninja</option>
+      <option value="jutsu">Jutsu</option>
+      <option value="mission">Missão</option>
+      <option value="client">Cliente</option>
+    </select>
+  </div>
+
+  <div class="villages-conteiner">
+    <div class="villages">
+      <select name="" id="select-villages">
+        <option value="">Selecione</option>
+        <option value="cloud">Nuvem</option>
+        <option value="leaf">Folha</option>
+        <option value="mist">Água</option>
+        <option value="rain">Chuva</option>
+        <option value="rock">Pedra</option>
+        <option value="sand">Areia</option>
+        <option value="sound">Som</option>
+      </select>
+      <div class="type">
+        <select name="" id="select-type-villages">
+          <option value="normal">Normal</option>
+          <option value="aka">Aka</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
   <script>
+
+    //selects
+    const selectCardType = document.getElementById('select-type-card')
+
+    const selectVillage = document.getElementById('select-villages')
+    const selectVillageType = document.getElementById('select-type-villages')
 
     // Obtendo uma referência para o botão pelo id
     const titleText = document.getElementById('title-card')
     const subtitleText = document.getElementById('subtitle-card')
+    const levelText = document.getElementById('level-card')
     const btnDowload = document.getElementById('btnImgDowload');
     const btnUpdateText = document.getElementById('btnAtualizaTexto');
+
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d', { alpha: true });
 
@@ -39,17 +78,54 @@
     var downLine = new Image()
     downLine.src = 'lines/faixa_de_baixo.png'
 
+    var levelBG = new Image()
+    levelBG.src = 'nv_symbol.png'
+
     canvas.width = img.width;
     canvas.height = img.height;
 
     const x = canvas.width / 2
     const y = canvas.height / 2
 
+    const dicVillageImg = {}
+    loadImgVillages()
+
+    function calcTextSize(text) {
+      const textMetrics = ctx.measureText(text);
+      console.log(textMetrics)
+    }
+
+    function calcCenterImg(image) {
+
+      const x_img = x - (image.width / 2)
+      const y_img = y - (image.height / 2)
+
+      return [x_img, y_img]
+    }
+
     function loadBGImage() {
+
+      drawVillage()
+
       // Cria o canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.drawImage(img, 0, 0);
+
+      // Write Title, SubTitle, Jutsus Skills and Atributtes
+      writeInCanva()
+
+      //Lines
       drawLines()
+
+      //Card Level
+      if (levelText.value != '') {
+        drawLevelCard()
+      }
+
+      if ((selectCardType.value != 'mission')) {
+        drawVillage()
+      }
+
     }
 
     function drawLines() {
@@ -69,12 +145,11 @@
       document.fonts.add(AlenconDemo)
       document.fonts.add(TrebuchetMS)
 
-      loadBGImage()
       AlenconDemo.load().then(
         () => {
           console.log(`AlenconDemoFamily: ${AlenconDemo.status}`)
 
-          ctx.font = '70px AlenconDemoFamily'
+          ctx.font = '65px AlenconDemoFamily'
           ctx.fillStyle = 'black';
           ctx.textAlign = "center"
           ctx.fillText(titleText.value, x, y + 90);
@@ -86,13 +161,84 @@
       TrebuchetMS.load().then(
         () => {
           console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
+
+          //Subtitle Tags
           ctx.font = '600 20px TrebuchetMSFamily'
           ctx.fillStyle = '#8d313d'
           ctx.textAlign = "left"
           ctx.fillText(subtitleText.value, 70, y + 131);
+
         }, (err) => {
           console.error(err);
         })
+    }
+
+    function drawLevelCard() {
+
+      console.log('Writing Level Card...')
+      coord_img = calcCenterImg(levelBG)
+
+      ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
+
+      ctx.font = 'Bold 60px Arial'
+      ctx.lineWidth = 3
+      ctx.strokeStyle = 'black'
+      ctx.fillStyle = 'white'
+      ctx.textAlign = 'center'
+      ctx.fillText(levelText.value, (x + 280), y + 90)
+      ctx.strokeText(levelText.value, (x + 280), y + 90)
+
+    }
+
+    function loadImgVillages() {
+      const optionsVillage = selectVillage.options
+      const listVillages = []
+
+      for (const village of optionsVillage) {
+        listVillages.push(village.value)
+      }
+
+      for (const village of listVillages) {
+        //console.log(listVillages);
+        imgVillage = new Image()
+        imgVillage.src = `villages/${village}.png`
+        //ctx.drawImage(imgVillage, 0, 0);
+
+        dicVillageImg[village] = imgVillage
+        //listVillageImg.push(imgVillage)
+      }
+      //listVillageImg.splice(0, 1)
+      delete dicVillageImg[""]
+
+      //console.log(dicVillageImg)
+    }
+
+    function typesVillages(typeVillage) {
+
+      var villageImg = new Image()
+      console.log(dicVillageImg)
+
+      switch (selectVillageType.value) {
+
+        case 'aka':
+          akaNamePath = `aka_${typeVillage}.png`
+          villageImg = dicVillageImg[akaNamePath]
+          imgCoord = calcCenterImg(villageImg)
+          ctx.drawImage(villageImg, imgCoord[0], imgCoord[1]);
+          break;
+
+        default:
+          villageImg = dicVillageImg[typeVillage]
+          imgCoord = calcCenterImg(villageImg)
+          ctx.drawImage(villageImg, imgCoord[0] - 280, imgCoord[1] + 80);
+          break;
+      }
+    }
+
+    function drawVillage() {
+      if (selectVillage.value != '') {
+        typesVillages(selectVillage.value)
+      }
     }
 
     // Adicionando um ouvinte de evento de clique ao botão
@@ -107,12 +253,23 @@
     });
 
     titleText.addEventListener('input', function () {
-      writeInCanva()
+      loadBGImage()
     });
 
     subtitleText.addEventListener('input', () => {
-      writeInCanva()
+      loadBGImage()
     });
+
+    levelText.addEventListener('input', () => {
+      loadBGImage()
+    })
+
+    selectVillage.addEventListener('change', () => {
+      loadBGImage()
+    })
+    selectVillageType.addEventListener('change', () => {
+      loadBGImage()
+    })
 
   </script>
 </body>
