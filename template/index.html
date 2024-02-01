@@ -8,46 +8,76 @@
 </head>
 
 <body>
-  <div class="imgTemplate">
-    <canvas id="myCanvas" style="width: 343px; height: 500px;">
-  </div>
-  <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
 
-  <input type="text" name="" id="title-card">
-  <input type="text" name="" id="subtitle-card">
-  <input type="text" name="" id="level-card">
+  <div class="container">
 
-  <div class="card-types">
-    <select name="" id="select-type-card">
-      <option value="shinobi">Ninja</option>
-      <option value="jutsu">Jutsu</option>
-      <option value="mission">Missão</option>
-      <option value="client">Cliente</option>
-    </select>
-  </div>
+    <div class="imgTemplate">
+      <canvas id="myCanvas" style="width: 343px; height: 500px;">
+    </div>
 
-  <div class="villages-conteiner">
-    <div class="villages">
-      <select name="" id="select-villages">
-        <option value="">Selecione</option>
-        <option value="cloud">Nuvem</option>
-        <option value="leaf">Folha</option>
-        <option value="mist">Água</option>
-        <option value="rain">Chuva</option>
-        <option value="rock">Pedra</option>
-        <option value="sand">Areia</option>
-        <option value="sound">Som</option>
-      </select>
-      <div class="type">
-        <select name="" id="select-type-villages">
-          <option value="normal">Normal</option>
-          <option value="aka">Aka</option>
-        </select>
+    <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
+
+    <div class="title-conteiner">
+
+      <div class="txtForm">
+        <input type="text" name="" id="title-card" placeholder="Título">
+        <input type="text" name="" id="subtitle-card" placeholder="Tags">
+        <input type="text" name="" id="level-card" placeholder="Nível">
+      </div>
+
+      <div class="villages-conteiner">
+        <div class="villages">
+          <select name="" id="select-villages">
+            <option value="">Vila</option>
+            <option value="cloud">Nuvem</option>
+            <option value="leaf">Folha</option>
+            <option value="mist">Água</option>
+            <option value="rain">Chuva</option>
+            <option value="rock">Pedra</option>
+            <option value="sand">Areia</option>
+            <option value="sound">Som</option>
+          </select>
+          <div class="type-villages">
+            <select name="" id="select-type-villages">
+              <option value="normal">Normal</option>
+              <option value="aka">Aka</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
+
+
+    <div class="card-types">
+      <select name="" id="select-type-card">
+        <option value="shinobi">Ninja</option>
+        <option value="jutsu">Jutsu</option>
+        <option value="mission">Missão</option>
+        <option value="client">Cliente</option>
+      </select>
+    </div>
+
+    <div class="desc-container">
+
+      <div class="effect-container">
+        <input type="text" name="" id="effect-title" placeholder="Título do Efeito">
+        <textarea name="" id="effect-desc" cols="30" rows="2" placeholder="Descrição do Efeito"></textarea>
+      </div>
+
+    </div>
+
+
   </div>
 
+
   <script>
+    //Fonts
+    const AlenconDemo = new FontFace('AlenconDemoFamily', 'url(Allencon_Demo/Allencon-Demo.woff)')
+    const TrebuchetMS = new FontFace('TrebuchetMSFamily', 'url(Trebuchet_MS/trebuc.woff)')
+    const TrebuchetMSBold = new FontFace('TrebuchetMSBold', 'url(Trebuchet_MS/trebuchet_ms_bold.ttf)')
+    document.fonts.add(AlenconDemo)
+    document.fonts.add(TrebuchetMS)
+    document.fonts.add(TrebuchetMSBold)
 
     //selects
     const selectCardType = document.getElementById('select-type-card')
@@ -59,6 +89,9 @@
     const titleText = document.getElementById('title-card')
     const subtitleText = document.getElementById('subtitle-card')
     const levelText = document.getElementById('level-card')
+    const effectTitleText = document.getElementById('effect-title')
+    const effectDescTextA = document.getElementById('effect-desc')
+
     const btnDowload = document.getElementById('btnImgDowload');
     const btnUpdateText = document.getElementById('btnAtualizaTexto');
 
@@ -105,8 +138,6 @@
 
     function loadBGImage() {
 
-      drawVillage()
-
       // Cria o canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.drawImage(img, 0, 0);
@@ -139,12 +170,6 @@
     }
 
     function writeInCanva() {
-      const AlenconDemo = new FontFace('AlenconDemoFamily', 'url(Allencon_Demo/Allencon-Demo.woff)')
-      const TrebuchetMS = new FontFace('TrebuchetMSFamily', 'url(Trebuchet_MS/trebuc.woff)')
-
-      document.fonts.add(AlenconDemo)
-      document.fonts.add(TrebuchetMS)
-
       AlenconDemo.load().then(
         () => {
           console.log(`AlenconDemoFamily: ${AlenconDemo.status}`)
@@ -171,7 +196,59 @@
         }, (err) => {
           console.error(err);
         })
+
+      //effect-title
+      TrebuchetMS.load().then(
+        () => {
+          console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
+
+          var textTitleEffect = ''
+
+          if (['client', 'shinobi'].includes(selectCardType.value)) {
+            textTitleEffect = `[${effectTitleText.value}]:`
+          } else if (selectCardType.value === 'mission') {
+            textTitleEffect = 'Efeito:'
+          } else {
+            textTitleEffect = 'Requisitos:' //Alterar
+          }
+
+          //Subtitle Tags
+          ctx.font = 'Bold 25px TrebuchetMSFamily'
+          ctx.fillStyle = 'black'
+          ctx.textAlign = "left"
+          ctx.fillText(textTitleEffect, 50, y + 160);
+
+        }, (err) => {
+          console.error(err);
+        })
+
+
+      //effect-desc
+      TrebuchetMS.load().then(
+        () => {
+          console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
+
+          var textTitleDesc = ''
+
+          /* if (['client', 'shinobi'].includes(selectCardType.value)) {
+             textTitleEffect = `[${effectTitleText.value}]:`
+           } else if (selectCardType.value === 'mission') {
+             textTitleEffect = 'Efeito:'
+           } else {
+             textTitleEffect = 'Requisitos:' //Alterar
+           }*/
+
+          //Subtitle Tags
+          ctx.font = '20px TrebuchetMSFamily'
+          ctx.fillStyle = 'black'
+          ctx.textAlign = "left"
+          ctx.fillText(effectDescTextA.value, 100, y + 160);
+
+        }, (err) => {
+          console.error(err);
+        })
     }
+
 
     function drawLevelCard() {
 
@@ -180,13 +257,23 @@
 
       ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
 
-      ctx.font = 'Bold 60px Arial'
-      ctx.lineWidth = 3
-      ctx.strokeStyle = 'black'
-      ctx.fillStyle = 'white'
-      ctx.textAlign = 'center'
-      ctx.fillText(levelText.value, (x + 280), y + 90)
-      ctx.strokeText(levelText.value, (x + 280), y + 90)
+      TrebuchetMSBold.load().then(
+        () => {
+          console.log(`TrebuchetMSBold: ${TrebuchetMSBold.status}`)
+
+          ctx.font = 'Bold 60px TrebuchetMSBold'
+          ctx.lineWidth = 3
+          ctx.strokeStyle = 'black'
+          ctx.fillStyle = 'white'
+          ctx.textAlign = 'center'
+          ctx.fillText(levelText.value, (x + 280), y + 90)
+          ctx.strokeText(levelText.value, (x + 280), y + 90)
+
+        }, (err) => {
+          console.error(err);
+        })
+
+
 
     }
 
@@ -201,14 +288,20 @@
       for (const village of listVillages) {
         //console.log(listVillages);
         imgVillage = new Image()
+        imgAkaVillage = new Image()
         imgVillage.src = `villages/${village}.png`
+        imgAkaVillage.src = `villages/aka_${village}.png`
         //ctx.drawImage(imgVillage, 0, 0);
 
         dicVillageImg[village] = imgVillage
+        dicVillageImg[`aka_${village}`] = imgAkaVillage
         //listVillageImg.push(imgVillage)
       }
       //listVillageImg.splice(0, 1)
       delete dicVillageImg[""]
+      delete dicVillageImg["aka_"]
+
+      dicVillageImg['aka_cloud'] = `villages/cloud.png`
 
       //console.log(dicVillageImg)
     }
@@ -216,15 +309,14 @@
     function typesVillages(typeVillage) {
 
       var villageImg = new Image()
-      console.log(dicVillageImg)
 
       switch (selectVillageType.value) {
 
         case 'aka':
-          akaNamePath = `aka_${typeVillage}.png`
-          villageImg = dicVillageImg[akaNamePath]
+          villageImg = dicVillageImg[`aka_${typeVillage}`]
+          console.log(dicVillageImg)
           imgCoord = calcCenterImg(villageImg)
-          ctx.drawImage(villageImg, imgCoord[0], imgCoord[1]);
+          ctx.drawImage(villageImg, imgCoord[0] - 280, imgCoord[1] + 80);
           break;
 
         default:
@@ -252,24 +344,14 @@
 
     });
 
-    titleText.addEventListener('input', function () {
-      loadBGImage()
-    });
+    titleText.addEventListener('input', () => loadBGImage())
+    subtitleText.addEventListener('input', () => loadBGImage())
+    levelText.addEventListener('input', () => loadBGImage())
+    effectTitleText.addEventListener('input', () => loadBGImage())
 
-    subtitleText.addEventListener('input', () => {
-      loadBGImage()
-    });
-
-    levelText.addEventListener('input', () => {
-      loadBGImage()
-    })
-
-    selectVillage.addEventListener('change', () => {
-      loadBGImage()
-    })
-    selectVillageType.addEventListener('change', () => {
-      loadBGImage()
-    })
+    selectVillage.addEventListener('change', () => loadBGImage())
+    selectVillageType.addEventListener('change', () => loadBGImage())
+    selectCardType.addEventListener('change', () => loadBGImage())
 
   </script>
 </body>
