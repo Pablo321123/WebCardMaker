@@ -186,67 +186,64 @@
     }
 
     function printAtWordWrap(text, x, y, lineHeight, fitWidth, initialLineWidth) {
-      fitWidth = 0 || fitWidth
 
-      if (fitWidth <= 0) {
-        ctx.fillText(text, x + 50, y)
-      }
+      //var w = calcTextSize(str).width + (currentLine == 0 ? initialLineWidth : 0)
+      // 
+      //ctx.fillText(words.slice(0, idx - 1).join(' '), currentLine == 0 ? x : 50, y + (lineHeight * currentLine));
 
-      var words = text.split(' ')
+      // Personalização do texto
+      const NR = '{*}'
+      const VR = '{~}'
+
+      //Contador de linha
       var currentLine = 0
-      var idx = 1 //Contador de Espaços
-      var teste = 0
 
+      // Variavel Texto
+      var lineText = ''
+      var lines = []
+      var tamLine = 0
 
-      while (words.length > 0 && idx <= words.length) {
-        var str = words.slice(0, idx).join(' ')
-        var w = calcTextSize(str).width + (currentLine == 0 ? initialLineWidth : 0)
-        var lb = str.indexOf('\n')
+      for (let i = 0; i < text.length; i++) {
+        const caractere = text.charAt(i);
 
-        if (w > fitWidth) {
+        lineText += caractere
+        tamLine = calcTextSize(lineText).width
 
-          if (idx == 1) {
-            idx = 2
-          }
-          ctx.fillText(words.slice(0, idx - 1).join(' '), currentLine == 0 ? x : 50, y + (lineHeight * currentLine));
-          currentLine++
-          words = words.splice(idx - 1)
-          idx = 1
-        } else if (lb > 0) {
+        console.log(`tamLine:${tamLine} >= fitWidth:${fitWidth}`)
 
-          //console.log(idx)
-          //console.log(words.slice(0, idx).join(' '))
-
-          line = words.slice(0).join(' ') // A gente não sabe se o \n está aqui
-          if (line.indexOf('\n') > 0) {
-            lb_group = line.split('\n')
-
-            //console.log(lb_group)
-            //countWordsToErase = lb_group[0].split(' ').length + lb_group[1].split(' ').length
-            //console.log(countWordsToErase)
-
-            for (break_line of lb_group) {
-              //console.log(break_line)
-
-              ctx.fillText(break_line, currentLine == 0 ? x : 50, y + (lineHeight * currentLine));
-              currentLine++
-            }
-            words = words.splice(words.length)
-            lb_group = lb_group.splice(lb_group.length)
-            console.log(words)
-            console.log(lb_group)
-            console.log(idx)
-
-            continue;
-          }
-        }
-        else {
-          idx++
-        }
+        if (tamLine >= fitWidth - 50) {
+          lastSpace = lineText.lastIndexOf(' ')
+          lineText = lineText.substring(0, lastSpace) + '\n' + lineText.substring(lastSpace + 1)
+          lines.push(lineText)
+          lineText = ''
+        }        
       }
-      if (idx > 0) {
-        ctx.fillText(words.join(' '), currentLine == 0 ? x : 50, y + (lineHeight * currentLine))
+
+      lines.push(lineText)
+
+      lineText = lines.splice(0).join('')
+      lineText = lineText.split('\n')
+      console.log(lineText);
+
+
+
+      for (line of lineText) {
+        currentLine = lineText.indexOf(line)
+
+
+        if(line.indexOf('{*}') > 0){
+          lineText = lineText.substring(0, lastSpace) + '\n' + lineText.substring(lastSpace + 1)
+        }
+
+
+        ctx.fillText(line, currentLine == 0 ? x : 50, y + (lineHeight * currentLine));
       }
+
+
+
+
+
+
     }
 
     function writeInCanva() {
@@ -313,7 +310,7 @@
            }*/
 
           //Subtitle Tags
-          ctx.font = '20px TrebuchetMSFamily'
+          ctx.font = 'bold 20px TrebuchetMSFamily'
           ctx.fillStyle = 'black'
           ctx.textAlign = "left"
           printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, y + 160, 25, 700, effectTitleSize.width)
