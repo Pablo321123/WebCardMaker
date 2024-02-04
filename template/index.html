@@ -125,7 +125,7 @@
 
     function calcTextSize(text) {
       const textMetrics = ctx.measureText(text);
-      //console.log(textMetrics)
+      ////console.log(textMetrics)
 
       return textMetrics
     }
@@ -163,7 +163,7 @@
 
     function drawLines() {
       ctx.drawImage(upLine, (upLine.width - x) / 4, y + 110)
-      console.log('Desenhando linha de cima...')
+      //console.log('Desenhando linha de cima...')
 
       /*ctx.strokeStyle = "#8d313d";
           ctx.moveTo(70, y + 110);
@@ -183,6 +183,61 @@
       }
 
       return textTitleEffect
+    }
+
+    function searchSpecialWords(line, x, y, NR, VR) {
+
+      var groupSpecial = []
+      groupNegrito = line.match(/\{\*(.*?)\*\}/g); //ER para capturar o token
+      groupVermelho = line.match(/\{~(.*?)~\}/g); //ER para capturar o token
+
+      if (groupNegrito == null) {
+        groupSpecial = groupVermelho
+      } else if (groupVermelho == null) {
+        groupSpecial = groupNegrito
+      } else {
+        groupSpecial = groupNegrito.concat(groupVermelho)
+      }
+
+      var groupWords = line.split(' ')
+
+      var specialText = ''
+
+      for (var i = 0; i < groupWords.length; i++) {
+        word = groupWords[i]
+        token = word.substring(0, 3)
+        if ((token === NR || token === VR) && (groupSpecial != null)) {
+          for (var j = 0; j < groupSpecial.length; j++) {
+            special = groupSpecial[j]
+            if (special != null) {
+              if (special.includes(word)) {
+                specialSize = special.split(' ').length
+                i += (specialSize) > 1 ? specialSize - 1 : 0
+                //console.log(specialSize)
+
+                if (special.includes(NR)) {
+                  ctx.font = 'bold 20px TrebuchetMSFamily'
+                  ctx.fillStyle = 'black'
+                } else {
+                  ctx.font = '20px TrebuchetMSFamily'
+                  ctx.fillStyle = '#8d313d'
+                }
+                specialText = special.substring(3, special.length - 3)
+                ctx.fillText(specialText, x, y);
+                x += calcTextSize(`${specialText} `).width
+                break
+              }
+            } else {
+              continue
+            }
+          }
+        } else {
+          ctx.font = '20px TrebuchetMSFamily'
+          ctx.fillStyle = 'black'
+          ctx.fillText(word, x, y);
+          x += calcTextSize(`${word} `).width
+        }
+      }
     }
 
     function printAtWordWrap(text, x, y, lineHeight, fitWidth, initialLineWidth) {
@@ -209,47 +264,40 @@
         lineText += caractere
         tamLine = calcTextSize(lineText).width
 
-        console.log(`tamLine:${tamLine} >= fitWidth:${fitWidth}`)
+        ////console.log(`tamLine:${tamLine} >= fitWidth:${fitWidth}`)
 
         if (tamLine >= fitWidth - 50) {
           lastSpace = lineText.lastIndexOf(' ')
           lineText = lineText.substring(0, lastSpace) + '\n' + lineText.substring(lastSpace + 1)
           lines.push(lineText)
           lineText = ''
-        }        
+        }
       }
 
       lines.push(lineText)
 
       lineText = lines.splice(0).join('')
       lineText = lineText.split('\n')
-      console.log(lineText);
-
-
+      //console.log(lineText);
 
       for (line of lineText) {
         currentLine = lineText.indexOf(line)
 
-
-        if(line.indexOf('{*}') > 0){
-          lineText = lineText.substring(0, lastSpace) + '\n' + lineText.substring(lastSpace + 1)
+        //console.log(line)
+        if ((line.indexOf(NR) >= 0) || (line.indexOf(VR) >= 0)) {
+          searchSpecialWords(line, currentLine == 0 ? x : 50, y + (lineHeight * currentLine), NR, VR)
+          continue
         }
 
-
+        ctx.font = '20px TrebuchetMSFamily'
         ctx.fillText(line, currentLine == 0 ? x : 50, y + (lineHeight * currentLine));
       }
-
-
-
-
-
-
     }
 
     function writeInCanva() {
       AlenconDemo.load().then(
         () => {
-          console.log(`AlenconDemoFamily: ${AlenconDemo.status}`)
+          //console.log(`AlenconDemoFamily: ${AlenconDemo.status}`)
 
           ctx.font = '65px AlenconDemoFamily'
           ctx.fillStyle = 'black';
@@ -257,12 +305,12 @@
           ctx.fillText(titleText.value, x, y + 90);
 
         }, (err) => {
-          console.error(err);
+          //console.error(err);
         })
 
       TrebuchetMS.load().then(
         () => {
-          console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
+          //console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
 
           //Subtitle Tags
           ctx.font = '600 20px TrebuchetMSFamily'
@@ -271,13 +319,13 @@
           ctx.fillText(subtitleText.value, 70, y + 131);
 
         }, (err) => {
-          console.error(err);
+          //console.error(err);
         })
 
       //effect-title
       TrebuchetMS.load().then(
         () => {
-          console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
+          //console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
 
           const textTitleEffect = chooseTypeCard()
 
@@ -285,17 +333,17 @@
           ctx.font = 'Bold 25px TrebuchetMSFamily'
           ctx.fillStyle = 'black'
           ctx.textAlign = "left"
-          ctx.fillText(textTitleEffect, 50, y + 160);
+          ctx.fillText(textTitleEffect, 50, y + 170);
 
         }, (err) => {
-          console.error(err);
+          //console.error(err);
         })
 
 
       //effect-desc
       TrebuchetMS.load().then(
         () => {
-          console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
+          //console.log(`TrebuchetMSFamily: ${TrebuchetMS.status}`)
 
           const textTitleEffect = chooseTypeCard()
           effectTitleSize = calcTextSize(textTitleEffect)
@@ -313,24 +361,24 @@
           ctx.font = 'bold 20px TrebuchetMSFamily'
           ctx.fillStyle = 'black'
           ctx.textAlign = "left"
-          printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, y + 160, 25, 700, effectTitleSize.width)
+          printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, y + 170, 25, 700, effectTitleSize.width)
           //ctx.fillText(effectDescTextA.value, effectTitleSize.width + 50, y + 160); //50 é margem inicial
 
         }, (err) => {
-          console.error(err);
+          //console.error(err);
         })
     }
 
     function drawLevelCard() {
 
-      console.log('Writing Level Card...')
+      //console.log('Writing Level Card...')
       coord_img = calcCenterImg(levelBG)
 
       ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
 
       TrebuchetMSBold.load().then(
         () => {
-          console.log(`TrebuchetMSBold: ${TrebuchetMSBold.status}`)
+          //console.log(`TrebuchetMSBold: ${TrebuchetMSBold.status}`)
 
           ctx.font = 'Bold 60px TrebuchetMSBold'
           ctx.lineWidth = 3
@@ -341,7 +389,7 @@
           ctx.strokeText(levelText.value, (x + 280), y + 90)
 
         }, (err) => {
-          console.error(err);
+          //console.error(err);
         })
 
 
@@ -357,7 +405,7 @@
       }
 
       for (const village of listVillages) {
-        //console.log(listVillages);
+        ////console.log(listVillages);
         imgVillage = new Image()
         imgAkaVillage = new Image()
         imgVillage.src = `villages/${village}.png`
@@ -374,7 +422,7 @@
 
       dicVillageImg['aka_cloud'] = `villages/cloud.png`
 
-      //console.log(dicVillageImg)
+      ////console.log(dicVillageImg)
     }
 
     function typesVillages(typeVillage) {
@@ -385,7 +433,7 @@
 
         case 'aka':
           villageImg = dicVillageImg[`aka_${typeVillage}`]
-          console.log(dicVillageImg)
+          //console.log(dicVillageImg)
           imgCoord = calcCenterImg(villageImg)
           ctx.drawImage(villageImg, imgCoord[0] - 280, imgCoord[1] + 80);
           break;
@@ -407,7 +455,7 @@
     // Adicionando um ouvinte de evento de clique ao botão
     btnDowload.addEventListener('click', function () {
       // Faz o download da imagem
-      console.log(titleText.value)
+      ////console.log(titleText.value)
       var link = document.getElementById('imagePreview');
       link.download = canvas.toDataURL('image/jpeg');
       link.href = link.download
