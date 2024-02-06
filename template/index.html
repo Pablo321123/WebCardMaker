@@ -75,6 +75,9 @@
     const AlenconDemo = new FontFace('AlenconDemoFamily', 'url(Allencon_Demo/Allencon-Demo.woff)')
     const TrebuchetMS = new FontFace('TrebuchetMSFamily', 'url(Trebuchet_MS/trebuc.woff)')
     const TrebuchetMSBold = new FontFace('TrebuchetMSBold', 'url(Trebuchet_MS/trebuchet_ms_bold.ttf)')
+
+    var fontNumberTrebuchetBold = 'bold 60px TrebuchetMSBold'
+
     document.fonts.add(AlenconDemo)
     document.fonts.add(TrebuchetMS)
     document.fonts.add(TrebuchetMSBold)
@@ -241,11 +244,6 @@
     }
 
     function printAtWordWrap(text, x, y, lineHeight, fitWidth, initialLineWidth) {
-
-      //var w = calcTextSize(str).width + (currentLine == 0 ? initialLineWidth : 0)
-      // 
-      //ctx.fillText(words.slice(0, idx - 1).join(' '), currentLine == 0 ? x : 50, y + (lineHeight * currentLine));
-
       // Personalização do texto
       const NR = '{*}'
       const VR = '{~}'
@@ -285,16 +283,20 @@
 
         //console.log(line)
         if ((line.indexOf(NR) >= 0) || (line.indexOf(VR) >= 0)) {
-          searchSpecialWords(line, currentLine == 0 ? x : 50, y + (lineHeight * currentLine), NR, VR)
+          searchSpecialWords(line, currentLine == 0 ? x : initialLineWidth, y + (lineHeight * currentLine), NR, VR)
           continue
         }
 
         ctx.font = '20px TrebuchetMSFamily'
-        ctx.fillText(line, currentLine == 0 ? x : 50, y + (lineHeight * currentLine));
+        ctx.fillText(line, currentLine == 0 ? x : initialLineWidth, y + (lineHeight * currentLine));
       }
+
+      return currentLine
     }
 
+
     function writeInCanva() {
+
       AlenconDemo.load().then(
         () => {
           //console.log(`AlenconDemoFamily: ${AlenconDemo.status}`)
@@ -305,7 +307,7 @@
           ctx.fillText(titleText.value, x, y + 90);
 
         }, (err) => {
-          //console.error(err);
+          console.error(err);
         })
 
       TrebuchetMS.load().then(
@@ -319,7 +321,7 @@
           ctx.fillText(subtitleText.value, 70, y + 131);
 
         }, (err) => {
-          //console.error(err);
+          console.error(err);
         })
 
       //effect-title
@@ -336,9 +338,8 @@
           ctx.fillText(textTitleEffect, 50, y + 170);
 
         }, (err) => {
-          //console.error(err);
+          console.error(err);
         })
-
 
       //effect-desc
       TrebuchetMS.load().then(
@@ -357,43 +358,75 @@
              textTitleEffect = 'Requisitos:' //Alterar
            }*/
 
-          //Subtitle Tags
+          const lineEffectDescSize = 25
+          const yEffectDesc = y + 170
+
           ctx.font = 'bold 20px TrebuchetMSFamily'
           ctx.fillStyle = 'black'
           ctx.textAlign = "left"
-          printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, y + 170, 25, 700, effectTitleSize.width)
+          var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, yEffectDesc, lineEffectDescSize, 700, 50)
           //ctx.fillText(effectDescTextA.value, effectTitleSize.width + 50, y + 160); //50 é margem inicial
 
+
+          switch (selectCardType.value) {
+            case 'shinobi':
+
+              const yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 150
+              const xLevelJutsu = 150
+
+              console.log(numLines * lineEffectDescSize);
+              writeStrokeNumber('3', xLevelJutsu, yLevelJutsu, 40)
+
+              break;
+            case 'client':
+              break;
+            case 'jutsu':
+              break;
+            default:
+              //mission
+              break;
+          }
+
+
         }, (err) => {
-          //console.error(err);
+          console.error(err);
         })
     }
 
-    function drawLevelCard() {
-
-      //console.log('Writing Level Card...')
-      coord_img = calcCenterImg(levelBG)
-
-      ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
-
+    function writeStrokeNumber(text, x, y, size = 60) {
       TrebuchetMSBold.load().then(
         () => {
           //console.log(`TrebuchetMSBold: ${TrebuchetMSBold.status}`)
 
-          ctx.font = 'Bold 60px TrebuchetMSBold'
+          if (size != 60) {
+            console.log(size);
+            if (!Number.isNaN(size)) {
+              ctx.font = fontNumberTrebuchetBold.replace('60', size)
+            } else {
+              ctx.font = fontNumberTrebuchetBold
+              console.log('Digite um número valido para alterar o tamanho da fonte da (mana) do jutsu');
+            }
+          } else {
+            ctx.font = fontNumberTrebuchetBold
+          }
+
           ctx.lineWidth = 3
           ctx.strokeStyle = 'black'
           ctx.fillStyle = 'white'
           ctx.textAlign = 'center'
-          ctx.fillText(levelText.value, (x + 280), y + 90)
-          ctx.strokeText(levelText.value, (x + 280), y + 90)
+          ctx.fillText(text, x, y)
+          ctx.strokeText(text, x, y)
 
         }, (err) => {
-          //console.error(err);
+          console.error(err);
         })
+    }
 
-
-
+    function drawLevelCard() {
+      //console.log('Writing Level Card...')
+      coord_img = calcCenterImg(levelBG)
+      ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
+      writeStrokeNumber(levelText.value, (x + 280), y + 90)
     }
 
     function loadImgVillages() {
