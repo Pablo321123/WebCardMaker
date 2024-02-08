@@ -11,20 +11,15 @@
 
   <div class="container">
 
+
+
     <div class="imgTemplate">
       <canvas id="myCanvas" style="width: 343px; height: 500px;">
     </div>
 
     <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
 
-    <div class="title-conteiner">
-
-      <div class="txtForm">
-        <input type="text" name="" id="title-card" placeholder="Título">
-        <input type="text" name="" id="subtitle-card" placeholder="Tags">
-        <input type="number" name="" id="level-card" placeholder="Nível">
-      </div>
-
+    <div class="selects-container">
       <div class="villages-conteiner">
         <div class="villages">
           <select name="" id="select-villages">
@@ -45,28 +40,49 @@
           </div>
         </div>
       </div>
+      <div class="card-types">
+        <select name="" id="select-type-card">
+          <option value="shinobi">Ninja</option>
+          <option value="jutsu">Jutsu</option>
+          <option value="mission">Missão</option>
+          <option value="client">Cliente</option>
+        </select>
+      </div>
     </div>
 
+    <div class="txtForm">
+      <div class="title-conteiner">
+        <input type="text" name="" id="title-card" placeholder="Título">
+        <input type="text" name="" id="subtitle-card" placeholder="Tags">
+        <input type="number" name="" id="level-card" placeholder="Nível">
 
-    <div class="card-types">
-      <select name="" id="select-type-card">
-        <option value="shinobi">Ninja</option>
-        <option value="jutsu">Jutsu</option>
-        <option value="mission">Missão</option>
-        <option value="client">Cliente</option>
-      </select>
-    </div>
+        <div class="desc-container">
+          <div class="effect-container">
+            <input type="text" name="" id="effect-title" placeholder="Título do Efeito">
+            <textarea name="" id="effect-desc" cols="30" rows="2" placeholder="Descrição do Efeito"></textarea>
+          </div>
+        </div>
 
-    <div class="desc-container">
+        <div class="jutsu-desc-form">
+          <label for="chakra-cost">Custo de Chakra:</label>
+          <input type="text" name="chakra-cost" id="chakra-cost" placeholder="Custo de Chakra">
 
-      <div class="effect-container">
-        <input type="text" name="" id="effect-title" placeholder="Título do Efeito">
-        <textarea name="" id="effect-desc" cols="30" rows="2" placeholder="Descrição do Efeito"></textarea>
+          <label for="jutsu-desc">Descrição do Jutsu:</label>
+          <textarea type="text" name="jutsu-desc" id="jutsu-desc" placeholder="Descrição do Jutsu"></textarea>
+        </div>
       </div>
 
+      <div class="atributtes-text">
+        <label for="intellige">Inteligencia:</label>
+        <input type="text" name="" id="intelligeText" placeholder="Inteligencia">
+        <label for="intellige">Velocidade:</label>
+        <input type="text" name="" id="speedText" placeholder="Velocidade">
+        <label for="intellige">Ataque:</label>
+        <input type="text" name="" id="atkText" placeholder="Ataque">
+        <label for="intellige">Defesa:</label>
+        <input type="text" name="" id="defText" placeholder="Defesa">
+      </div>
     </div>
-
-
   </div>
 
 
@@ -94,6 +110,13 @@
     const levelText = document.getElementById('level-card')
     const effectTitleText = document.getElementById('effect-title')
     const effectDescTextA = document.getElementById('effect-desc')
+    const chakraCostText = document.getElementById('chakra-cost')
+    const jutsuDescTextA = document.getElementById('jutsu-desc')
+
+    intelligeText = document.getElementById('intelligeText')
+    speedText = document.getElementById('speedText')
+    atkText = document.getElementById('atkText')
+    defText = document.getElementById('defText')
 
     const btnDowload = document.getElementById('btnImgDowload');
     const btnUpdateText = document.getElementById('btnAtualizaTexto');
@@ -160,6 +183,10 @@
 
       if ((selectCardType.value != 'mission')) {
         drawVillage()
+
+        if (selectCardType.value.includes('client') || selectCardType.value.includes('shinobi')) {
+          console.log('DEU CERTO DE CABULOSO');
+        }
       }
 
     }
@@ -349,15 +376,6 @@
           const textTitleEffect = chooseTypeCard()
           effectTitleSize = calcTextSize(textTitleEffect)
 
-
-          /* if (['client', 'shinobi'].includes(selectCardType.value)) {
-             textTitleEffect = `[${effectTitleText.value}]:`
-           } else if (selectCardType.value === 'mission') {
-             textTitleEffect = 'Efeito:'
-           } else {
-             textTitleEffect = 'Requisitos:' //Alterar
-           }*/
-
           const lineEffectDescSize = 25
           const yEffectDesc = y + 170
 
@@ -371,11 +389,12 @@
           switch (selectCardType.value) {
             case 'shinobi':
 
-              const yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 150
+              const yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 125
               const xLevelJutsu = 150
 
               console.log(numLines * lineEffectDescSize);
-              writeStrokeNumber('3', xLevelJutsu, yLevelJutsu, 40)
+              writeStrokeNumber(chakraCostText.value, xLevelJutsu, yLevelJutsu, 40)
+              numLines = printAtWordWrap(jutsuDescTextA.value, xLevelJutsu + 50, yLevelJutsu - 20, 25, 700, xLevelJutsu + 50)
 
               break;
             case 'client':
@@ -501,10 +520,16 @@
     levelText.addEventListener('input', () => loadBGImage())
     effectTitleText.addEventListener('input', () => loadBGImage())
     effectDescTextA.addEventListener('input', () => loadBGImage())
+    chakraCostText.addEventListener('input', () => loadBGImage())
+    jutsuDescTextA.addEventListener('input', () => loadBGImage())
 
     selectVillage.addEventListener('change', () => loadBGImage())
     selectVillageType.addEventListener('change', () => loadBGImage())
     selectCardType.addEventListener('change', () => loadBGImage())
+    intelligeText.addEventListener('change', () => loadBGImage())
+    speedText.addEventListener('change', () => loadBGImage())
+    atkText.addEventListener('change', () => loadBGImage())
+    defText.addEventListener('change', () => loadBGImage())
 
   </script>
 </body>
