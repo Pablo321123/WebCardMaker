@@ -48,6 +48,39 @@
           <option value="client">Cliente</option>
         </select>
       </div>
+      <div class="type-jutsu-container">
+        <select name="jutsu-type" id="jutsu-type">
+          <option value="ambush">Ambush</option>
+          <option value="Chakra Control">Chakra Control</option>
+          <option value="cliente">Cliente</option>
+          <option value="Genjutsu">Genjutsu</option>
+          <option value="hyoton">Hyoton</option>
+          <option value="insect">Insect</option>
+          <option value="mestre_de_marionetes">Mestre de Marionetes</option>
+          <option value="Mission">Mission</option>
+          <option value="Ninjutsu_Genjutsu">Ninjutsu e Genjutsu</option>
+          <option value="Ninjutsu">Ninjutsu</option>
+          <option value="Oil">Oil</option>
+          <option value="prepared">Prepared</option>
+          <option value="Quick">Quick</option>
+          <option value="Rage">Rage</option>
+          <option value="Sage">Sage</option>
+          <option value="samurai">Samurai</option>
+          <option value="Sand">Sand</option>
+          <option value="sensorial">Sensorial</option>
+          <option value="Shadow">Shadow</option>
+          <option value="shadow_clones">Shadow Clones</option>
+          <option value="Silent_Assasin">Silent Assasin</option>
+          <option value="Snake">Snake</option>
+          <option value="Speed">Speed</option>
+          <option value="Strategist">Strategist</option>
+          <option value="Strategist_Shadow">Strategist Shadow</option>
+          <option value="support">Support</option>
+          <option value="Taijutsu">Taijutsu</option>
+          <option value="Toad">Toad</option>
+          <option value="weapon">Weapon</option>
+        </select>
+      </div>
     </div>
 
     <div class="txtForm">
@@ -74,13 +107,13 @@
 
       <div class="atributtes-text">
         <label for="intellige">Inteligencia:</label>
-        <input type="text" name="" id="intelligeText" placeholder="Inteligencia">
-        <label for="intellige">Velocidade:</label>
-        <input type="text" name="" id="speedText" placeholder="Velocidade">
-        <label for="intellige">Ataque:</label>
-        <input type="text" name="" id="atkText" placeholder="Ataque">
-        <label for="intellige">Defesa:</label>
-        <input type="text" name="" id="defText" placeholder="Defesa">
+        <input type="text" name="intellige" id="intelligeText" placeholder="Inteligencia">
+        <label for="speed">Velocidade:</label>
+        <input type="text" name="speed" id="speedText" placeholder="Velocidade">
+        <label for="atk">Ataque:</label>
+        <input type="text" name="atk" id="atkText" placeholder="Ataque">
+        <label for="def">Defesa:</label>
+        <input type="text" name="def" id="defText" placeholder="Defesa">
       </div>
     </div>
   </div>
@@ -104,6 +137,8 @@
     const selectVillage = document.getElementById('select-villages')
     const selectVillageType = document.getElementById('select-type-villages')
 
+    const selectJutsuType = document.getElementById('jutsu-type')
+
     // Obtendo uma referência para o botão pelo id
     const titleText = document.getElementById('title-card')
     const subtitleText = document.getElementById('subtitle-card')
@@ -113,10 +148,10 @@
     const chakraCostText = document.getElementById('chakra-cost')
     const jutsuDescTextA = document.getElementById('jutsu-desc')
 
-    intelligeText = document.getElementById('intelligeText')
-    speedText = document.getElementById('speedText')
-    atkText = document.getElementById('atkText')
-    defText = document.getElementById('defText')
+    const intelligeText = document.getElementById('intelligeText')
+    const speedText = document.getElementById('speedText')
+    const atkText = document.getElementById('atkText')
+    const defText = document.getElementById('defText')
 
     const btnDowload = document.getElementById('btnImgDowload');
     const btnUpdateText = document.getElementById('btnAtualizaTexto');
@@ -130,6 +165,20 @@
     img.onload = function () {
       loadBGImage()
     };
+
+    //Atributos
+    var atkAttr = new Image()
+    atkAttr.src = 'Attributes/atk_symbol.png'
+
+    var defAttr = new Image()
+    defAttr.src = 'Attributes/def_symbol.png'
+
+    var intAttr = new Image()
+    intAttr.src = 'Attributes/int_symbol.png'
+
+    var velAttr = new Image()
+    velAttr.src = 'Attributes/speed_symbol.png'
+
 
     var upLine = new Image()
     upLine.src = 'lines/faixa_de_cima.png'
@@ -149,6 +198,9 @@
     const dicVillageImg = {}
     loadImgVillages()
 
+    const dicJutsusType = {}
+    loadJutsusTypeImg()
+
     function calcTextSize(text) {
       const textMetrics = ctx.measureText(text);
       ////console.log(textMetrics)
@@ -156,10 +208,13 @@
       return textMetrics
     }
 
-    function calcCenterImg(image) {
+    function calcCenterImg(image, x_relative = 0, y_relative = 0) {
 
-      const x_img = x - (image.width / 2)
-      const y_img = y - (image.height / 2)
+      x_relative = x_relative > 0 ? x_relative : image.width
+      y_relative = y_relative > 0 ? y_relative : image.height
+
+      const x_img = x - (x_relative / 2)
+      const y_img = y - (y_relative / 2)
 
       return [x_img, y_img]
     }
@@ -173,8 +228,9 @@
       // Write Title, SubTitle, Jutsus Skills and Atributtes
       writeInCanva()
 
-      //Lines
+      //Lines and TypeJutsu
       drawLines()
+      coord_jutsu_type = drawJutsuType()
 
       //Card Level
       if (levelText.value != '') {
@@ -185,14 +241,42 @@
         drawVillage()
 
         if (selectCardType.value.includes('client') || selectCardType.value.includes('shinobi')) {
-          console.log('DEU CERTO DE CABULOSO');
+          drawAtributtes(atkText.value, defText.value, intelligeText.value, speedText.value, coord_jutsu_type)
         }
       }
 
     }
 
+    function drawAtributtes(atk, def, int, vel, coord_jutsu_type) {
+      console.log('COORDENADAS');
+      console.log(coord_jutsu_type[0]);
+
+      const coordXAtkDef = coord_jutsu_type[0] + 200
+      const coordXIntVel = coord_jutsu_type[0] - 130
+
+      const coordY = coord_jutsu_type[1] + 40
+
+      const attrXMargin = -100
+      const attrYMargin = -25
+
+
+
+
+      ctx.drawImage(atkAttr, coordXAtkDef + attrXMargin + 40, coordY + attrYMargin - 2.5)
+      writeStrokeNumber(`ATK: ${atk}`, coordXAtkDef, coordY, 32, '#adabad', 5)
+      ctx.drawImage(defAttr, coordXAtkDef + attrXMargin + 40, coordY + 40 + attrYMargin - 2.5)
+      writeStrokeNumber(`DEF: ${def}`, coordXAtkDef, coordY + 40, 32, '#adabad', 5)
+      ctx.drawImage(intAttr, coordXIntVel + attrXMargin, coordY + attrYMargin)
+      writeStrokeNumber(`Inteligencia: ${int}`, coordXIntVel, coordY, 25, '#adabad', 4)
+      ctx.drawImage(velAttr, coordXIntVel + attrXMargin, coordY + 40 + attrYMargin)
+      writeStrokeNumber(`Velocidade: ${vel}`, coord_jutsu_type[0] - 130, coordY + 40, 25, '#adabad', 4)
+      //writeStrokeNumber(int)
+      //writeStrokeNumber(vel)
+    }
+
     function drawLines() {
       ctx.drawImage(upLine, (upLine.width - x) / 4, y + 110)
+      ctx.drawImage(downLine, (downLine.width - x) / 4, y + 600 - 150)
       //console.log('Desenhando linha de cima...')
 
       /*ctx.strokeStyle = "#8d313d";
@@ -321,7 +405,6 @@
       return currentLine
     }
 
-
     function writeInCanva() {
 
       AlenconDemo.load().then(
@@ -382,7 +465,7 @@
           ctx.font = 'bold 20px TrebuchetMSFamily'
           ctx.fillStyle = 'black'
           ctx.textAlign = "left"
-          var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, yEffectDesc, lineEffectDescSize, 700, 50)
+          var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, yEffectDesc, lineEffectDescSize, 600, 50)
           //ctx.fillText(effectDescTextA.value, effectTitleSize.width + 50, y + 160); //50 é margem inicial
 
 
@@ -394,7 +477,9 @@
 
               console.log(numLines * lineEffectDescSize);
               writeStrokeNumber(chakraCostText.value, xLevelJutsu, yLevelJutsu, 40)
-              numLines = printAtWordWrap(jutsuDescTextA.value, xLevelJutsu + 50, yLevelJutsu - 20, 25, 700, xLevelJutsu + 50)
+              numLines = printAtWordWrap(jutsuDescTextA.value, xLevelJutsu + 50, yLevelJutsu - 20, 25, 650, xLevelJutsu + 50)
+
+              //ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
 
               break;
             case 'client':
@@ -412,7 +497,7 @@
         })
     }
 
-    function writeStrokeNumber(text, x, y, size = 60) {
+    function writeStrokeNumber(text, x, y, size = 60, colorFill = 'white', lineWidth = 3) {
       TrebuchetMSBold.load().then(
         () => {
           //console.log(`TrebuchetMSBold: ${TrebuchetMSBold.status}`)
@@ -429,12 +514,13 @@
             ctx.font = fontNumberTrebuchetBold
           }
 
-          ctx.lineWidth = 3
+          ctx.lineWidth = lineWidth
           ctx.strokeStyle = 'black'
-          ctx.fillStyle = 'white'
           ctx.textAlign = 'center'
-          ctx.fillText(text, x, y)
           ctx.strokeText(text, x, y)
+
+          ctx.fillStyle = colorFill
+          ctx.fillText(text, x, y)
 
         }, (err) => {
           console.error(err);
@@ -446,6 +532,30 @@
       coord_img = calcCenterImg(levelBG)
       ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
       writeStrokeNumber(levelText.value, (x + 280), y + 90)
+    }
+
+    function loadJutsusTypeImg() {
+      const optionsJutsus = selectJutsuType.options
+      const listJutsuTypes = []
+
+      for (const types of optionsJutsus) {
+        listJutsuTypes.push(types.value)
+      }
+
+      for (const jutsuType of listJutsuTypes) {
+        imgJutsuType = new Image()
+        imgJutsuType.src = `types/${jutsuType}.png`
+
+        dicJutsusType[jutsuType] = imgJutsuType
+      }
+      console.log(dicJutsusType);
+    }
+
+    function drawJutsuType() {
+      coord_img = calcCenterImg(dicJutsusType[selectJutsuType.value], 100, 100)
+      ctx.drawImage(dicJutsusType[selectJutsuType.value], coord_img[0], coord_img[1] + 510, 100, 100)
+
+      return [coord_img[0], coord_img[1] + 510]
     }
 
     function loadImgVillages() {
@@ -522,14 +632,16 @@
     effectDescTextA.addEventListener('input', () => loadBGImage())
     chakraCostText.addEventListener('input', () => loadBGImage())
     jutsuDescTextA.addEventListener('input', () => loadBGImage())
+    selectJutsuType.addEventListener('input', () => loadBGImage())
 
     selectVillage.addEventListener('change', () => loadBGImage())
     selectVillageType.addEventListener('change', () => loadBGImage())
     selectCardType.addEventListener('change', () => loadBGImage())
-    intelligeText.addEventListener('change', () => loadBGImage())
-    speedText.addEventListener('change', () => loadBGImage())
-    atkText.addEventListener('change', () => loadBGImage())
-    defText.addEventListener('change', () => loadBGImage())
+
+    intelligeText.addEventListener('input', () => loadBGImage())
+    speedText.addEventListener('input', () => loadBGImage())
+    atkText.addEventListener('input', () => loadBGImage())
+    defText.addEventListener('input', () => loadBGImage())
 
   </script>
 </body>
