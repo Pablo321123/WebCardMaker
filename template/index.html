@@ -97,11 +97,11 @@
         </div>
 
         <div class="jutsu-desc-form">
-          <label for="chakra-cost">Custo de Chakra:</label>
-          <input type="text" name="chakra-cost" id="chakra-cost" placeholder="Custo de Chakra">
+          <label for="numJutsus">Número de Jutsus</label>
+          <input type="number" name="" id="number-jutsus" placeholder="Número de jutsus">
 
-          <label for="jutsu-desc">Descrição do Jutsu:</label>
-          <textarea type="text" name="jutsu-desc" id="jutsu-desc" placeholder="Descrição do Jutsu"></textarea>
+          <div id="jutsu-desc-form">
+          </div>
         </div>
       </div>
 
@@ -145,8 +145,9 @@
     const levelText = document.getElementById('level-card')
     const effectTitleText = document.getElementById('effect-title')
     const effectDescTextA = document.getElementById('effect-desc')
-    const chakraCostText = document.getElementById('chakra-cost')
-    const jutsuDescTextA = document.getElementById('jutsu-desc')
+    const numberJutsus = document.getElementById('number-jutsus')
+    //const chakraCostText = document.getElementById('chakra-cost')
+    //const jutsuDescTextA = document.getElementById('jutsu-desc')
 
     const intelligeText = document.getElementById('intelligeText')
     const speedText = document.getElementById('speedText')
@@ -194,6 +195,8 @@
 
     const x = canvas.width / 2
     const y = canvas.height / 2
+
+    const listFieldJutsus = [] // Lista de campos de textos dinamicos referentes ao numero de jutsus da carta
 
     const dicVillageImg = {}
     loadImgVillages()
@@ -248,10 +251,10 @@
     }
 
     function drawAtributtes(atk, def, int, vel, coord_jutsu_type) {
-      console.log('COORDENADAS');
-      console.log(coord_jutsu_type[0]);
+      /*console.log('COORDENADAS');
+      console.log(coord_jutsu_type[0]);*/
 
-      const coordXAtkDef = coord_jutsu_type[0] + 200
+      const coordXAtkDef = coord_jutsu_type[0] + 150
       const coordXIntVel = coord_jutsu_type[0] - 130
 
       const coordY = coord_jutsu_type[1] + 40
@@ -259,17 +262,14 @@
       const attrXMargin = -100
       const attrYMargin = -25
 
-
-
-
-      ctx.drawImage(atkAttr, coordXAtkDef + attrXMargin + 40, coordY + attrYMargin - 2.5)
-      writeStrokeNumber(`ATK: ${atk}`, coordXAtkDef, coordY, 32, '#adabad', 5)
-      ctx.drawImage(defAttr, coordXAtkDef + attrXMargin + 40, coordY + 40 + attrYMargin - 2.5)
-      writeStrokeNumber(`DEF: ${def}`, coordXAtkDef, coordY + 40, 32, '#adabad', 5)
+      ctx.drawImage(atkAttr, coordXAtkDef + attrXMargin + 90, coordY + attrYMargin - 2.5)
+      writeStrokeNumber(`ATK: ${atk}`, coordXAtkDef, coordY, 32, '#adabad', 5, 'left')
+      ctx.drawImage(defAttr, coordXAtkDef + attrXMargin + 90, coordY + 40 + attrYMargin - 2.5)
+      writeStrokeNumber(`DEF: ${def}`, coordXAtkDef, coordY + 40, 32, '#adabad', 5, 'left')
       ctx.drawImage(intAttr, coordXIntVel + attrXMargin, coordY + attrYMargin)
-      writeStrokeNumber(`Inteligencia: ${int}`, coordXIntVel, coordY, 25, '#adabad', 4)
+      writeStrokeNumber(`Inteligencia: ${int}`, coordXIntVel - 90, coordY, 27, '#adabad', 4, 'left')
       ctx.drawImage(velAttr, coordXIntVel + attrXMargin, coordY + 40 + attrYMargin)
-      writeStrokeNumber(`Velocidade: ${vel}`, coord_jutsu_type[0] - 130, coordY + 40, 25, '#adabad', 4)
+      writeStrokeNumber(`Velocidade: ${vel}`, coordXIntVel - 90, coordY + 40, 27, '#adabad', 4, 'left')
       //writeStrokeNumber(int)
       //writeStrokeNumber(vel)
     }
@@ -472,13 +472,24 @@
           switch (selectCardType.value) {
             case 'shinobi':
 
-              const yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 125
+              //const yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 125
               const xLevelJutsu = 150
+              var yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 125
 
-              console.log(numLines * lineEffectDescSize);
-              writeStrokeNumber(chakraCostText.value, xLevelJutsu, yLevelJutsu, 40)
-              numLines = printAtWordWrap(jutsuDescTextA.value, xLevelJutsu + 50, yLevelJutsu - 20, 25, 650, xLevelJutsu + 50)
+              if (numberJutsus.value > 0) {
+                for (var i = 0; i <= numberJutsus.value;) {
 
+                  if (!(i || 0)) {
+                    yLevelJutsu = yLevelJutsu
+                  } else {
+                    yLevelJutsu = yLevelJutsu + 50 + (25 * numLines)
+                  }
+
+                  writeStrokeNumber(listFieldJutsus[i].value, xLevelJutsu, yLevelJutsu, 40, 'white', 8)
+                  numLines = printAtWordWrap(listFieldJutsus[i + 1].value, xLevelJutsu + 50, yLevelJutsu - 20, 25, 650, xLevelJutsu + 50)
+                  i += 2
+                }
+              }
               //ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
 
               break;
@@ -497,13 +508,13 @@
         })
     }
 
-    function writeStrokeNumber(text, x, y, size = 60, colorFill = 'white', lineWidth = 3) {
+    function writeStrokeNumber(text, x, y, size = 60, colorFill = 'white', lineWidth = 3, textAlign = 'center') {
       TrebuchetMSBold.load().then(
         () => {
           //console.log(`TrebuchetMSBold: ${TrebuchetMSBold.status}`)
 
           if (size != 60) {
-            console.log(size);
+            //console.log(size);
             if (!Number.isNaN(size)) {
               ctx.font = fontNumberTrebuchetBold.replace('60', size)
             } else {
@@ -516,7 +527,7 @@
 
           ctx.lineWidth = lineWidth
           ctx.strokeStyle = 'black'
-          ctx.textAlign = 'center'
+          ctx.textAlign = textAlign
           ctx.strokeText(text, x, y)
 
           ctx.fillStyle = colorFill
@@ -614,6 +625,7 @@
       }
     }
 
+
     // Adicionando um ouvinte de evento de clique ao botão
     btnDowload.addEventListener('click', function () {
       // Faz o download da imagem
@@ -629,9 +641,53 @@
     subtitleText.addEventListener('input', () => loadBGImage())
     levelText.addEventListener('input', () => loadBGImage())
     effectTitleText.addEventListener('input', () => loadBGImage())
-    effectDescTextA.addEventListener('input', () => loadBGImage())
-    chakraCostText.addEventListener('input', () => loadBGImage())
-    jutsuDescTextA.addEventListener('input', () => loadBGImage())
+    numberJutsus.addEventListener('input', () => {
+
+      listFieldJutsus.splice(0)
+      containerJutsusDesc = document.getElementById('jutsu-desc-form')
+      containerJutsusDesc.innerHTML = ''
+
+      for (var i = 0; i < numberJutsus.value; i++) { //GRAVACAO
+
+        label1 = document.createElement('label')
+        label1.for = `chakra-cost${i}`
+        label1.textContent = `Custo de Chakra do Jutsu ${i + 1}:`
+
+        text1 = document.createElement('input')
+        text1.type = 'text'
+        text1.id = `chakra-cost${i}`
+        text1.name = `chakra-cost${i}`
+        text1.placeholder = `Custo de Chakra do Jutsu ${i + 1}`
+        listFieldJutsus.push(text1)
+
+        label2 = document.createElement('label')
+        label2.for = `jutsu-desc${i}`
+        label2.textContent = `Descriçado do Jutsu ${i + 1}:`
+
+        text2 = document.createElement('textarea')
+        text2.type = 'text'
+        text2.id = `jutsu-desc${i}`
+        text2.name = `jutsu-desc${i}`
+        text2.placeholder = `Descrição do Jutsu ${i + 1}`
+        listFieldJutsus.push(text2)
+
+        containerJutsusDesc.appendChild(label1)
+        containerJutsusDesc.appendChild(text1)
+        containerJutsusDesc.appendChild(label2)
+        containerJutsusDesc.appendChild(text2)
+
+        text1.addEventListener('input', () => loadBGImage())
+        text2.addEventListener('input', () => loadBGImage())
+
+
+        /* <label for="chakra-cost">Custo de Chakra:</label>
+         <input type="text" name="chakra-cost" id="chakra-cost" placeholder="Custo de Chakra">
+ 
+         <label for="jutsu-desc">Descrição do Jutsu:</label>
+         <textarea type="text" name="jutsu-desc" id="jutsu-desc" placeholder="Descrição do Jutsu"></textarea>*/
+      }
+    })
+
     selectJutsuType.addEventListener('input', () => loadBGImage())
 
     selectVillage.addEventListener('change', () => loadBGImage())
