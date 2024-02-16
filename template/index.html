@@ -15,6 +15,10 @@
 
     <div class="imgTemplate">
       <canvas id="myCanvas" style="width: 343px; height: 500px;">
+      </canvas>
+      <div id="preview">
+        <!-- <img src="elementos/fire" alt="" id="source"> -->
+      </div>
     </div>
 
     <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
@@ -89,6 +93,12 @@
         <input type="text" name="" id="subtitle-card" placeholder="Tags">
         <input type="number" name="" id="level-card" placeholder="Nível">
 
+        <div class="container-image-select">
+          <input type="text" id="txtFileName" readonly="true">
+          <input type="file" id="inputFile" style="display: none;">
+          <button id="openModalBtn">Selecionar Imagem</button>
+        </div>
+
         <div class="desc-container">
           <div class="effect-container">
             <input type="text" name="" id="effect-title" placeholder="Título do Efeito">
@@ -154,6 +164,11 @@
     const atkText = document.getElementById('atkText')
     const defText = document.getElementById('defText')
 
+    const btnFile = document.getElementById('openModalBtn')
+    const txtFileName = document.getElementById('txtFileName')
+    const inputFile = document.getElementById('inputFile')
+    const preview = document.querySelector("#preview");
+
     const btnDowload = document.getElementById('btnImgDowload');
     const btnUpdateText = document.getElementById('btnAtualizaTexto');
 
@@ -179,7 +194,6 @@
 
     var velAttr = new Image()
     velAttr.src = 'Attributes/speed_symbol.png'
-
 
     var upLine = new Image()
     upLine.src = 'lines/faixa_de_cima.png'
@@ -474,7 +488,7 @@
 
               //const yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 125
               const xLevelJutsu = 150
-              var yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 125
+              var yLevelJutsu = (numLines * lineEffectDescSize) + yEffectDesc + 80
 
               if (numberJutsus.value > 0) {
                 for (var i = 0; i <= numberJutsus.value;) {
@@ -542,7 +556,7 @@
       //console.log('Writing Level Card...')
       coord_img = calcCenterImg(levelBG)
       ctx.drawImage(levelBG, (coord_img[0] + 280), (coord_img[1] + 58))
-      writeStrokeNumber(levelText.value, (x + 280), y + 90)
+      writeStrokeNumber(levelText.value, (x + 280), y + 90, 60, 'white', 6)
     }
 
     function loadJutsusTypeImg() {
@@ -687,6 +701,7 @@
          <textarea type="text" name="jutsu-desc" id="jutsu-desc" placeholder="Descrição do Jutsu"></textarea>*/
       }
     })
+    effectDescTextA.addEventListener('input', () => loadBGImage())
 
     selectJutsuType.addEventListener('input', () => loadBGImage())
 
@@ -698,6 +713,48 @@
     speedText.addEventListener('input', () => loadBGImage())
     atkText.addEventListener('input', () => loadBGImage())
     defText.addEventListener('input', () => loadBGImage())
+
+    btnFile.addEventListener('click', () => {
+      inputFile.click()
+    })
+
+    inputFile.addEventListener('change', () => {
+      var file = inputFile.files[0];
+
+      if (file) {
+        // Verifica se um arquivo foi selecionado
+        var reader = new FileReader();
+
+        reader.addEventListener('load',
+          () => {
+            var imageUrl = reader.result
+            txtFileName.value = file.name
+            const perfilImage = new Image()
+            perfilImage.src = imageUrl;
+
+            loadBGImage()
+            perfilImage.onload = function () {
+              // A imagem está totalmente carregada, agora podemos desenhá-la no canvas
+              // console.log(perfilImage.width);
+              coordCenter = calcCenterImg(perfilImage, perfilImage.height, perfilImage.width);
+              ctx.drawImage(perfilImage, 33, 33, y * 1.26, x * 1.38); //width, height
+            };
+
+            //preview.appendChild(perfilImage);
+
+
+          },
+          false,
+        );
+
+        reader.readAsDataURL(file)
+      }
+    })
+
+
+  </script>
+
+  <script>
 
   </script>
 </body>
