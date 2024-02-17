@@ -5,128 +5,163 @@
   <title>Naruto Card Maker </title>
   <meta charset="UTF-8">
   <link rel="icon" href="villages/leaf.png" type="image/png">
+  <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 
 <body>
 
   <div class="container">
 
+    <div class="left-container">
 
-
-    <div class="imgTemplate">
-      <canvas id="myCanvas" style="width: 343px; height: 500px;">
-      </canvas>
-      <div id="preview">
-        <!-- <img src="elementos/fire" alt="" id="source"> -->
-      </div>
-    </div>
-
-    <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
-
-    <div class="selects-container">
-      <div class="villages-conteiner">
-        <div class="villages">
-          <select name="" id="select-villages">
-            <option value="">Vila</option>
-            <option value="cloud">Nuvem</option>
-            <option value="leaf">Folha</option>
-            <option value="mist">Água</option>
-            <option value="rain">Chuva</option>
-            <option value="rock">Pedra</option>
-            <option value="sand">Areia</option>
-            <option value="sound">Som</option>
+      <div class="selects-container">
+        <div class="card-types">
+          <label for="type-card">Tipo de Carta</label>
+          <select name="type-card" id="select-type-card">
+            <option value="shinobi">Ninja</option>
+            <option value="jutsu">Jutsu</option>
+            <option value="mission">Missão</option>
+            <option value="client">Cliente</option>
           </select>
+        </div>
+        <div class="type-jutsu-container">
+          <label for="jutsu-type">Propriedade da carta</label>
+          <select name="jutsu-type" id="jutsu-type">
+            <option value="ambush">Ambush</option>
+            <option value="Chakra Control">Chakra Control</option>
+            <option value="cliente">Cliente</option>
+            <option value="Genjutsu">Genjutsu</option>
+            <option value="hyoton">Hyoton</option>
+            <option value="insect">Insect</option>
+            <option value="mestre_de_marionetes">Mestre de Marionetes</option>
+            <option value="Mission">Mission</option>
+            <option value="Ninjutsu_Genjutsu">Ninjutsu e Genjutsu</option>
+            <option value="Ninjutsu">Ninjutsu</option>
+            <option value="Oil">Oil</option>
+            <option value="prepared">Prepared</option>
+            <option value="Quick">Quick</option>
+            <option value="Rage">Rage</option>
+            <option value="Sage">Sage</option>
+            <option value="samurai">Samurai</option>
+            <option value="Sand">Sand</option>
+            <option value="sensorial">Sensorial</option>
+            <option value="Shadow">Shadow</option>
+            <option value="shadow_clones">Shadow Clones</option>
+            <option value="Silent_Assasin">Silent Assasin</option>
+            <option value="Snake">Snake</option>
+            <option value="Speed">Speed</option>
+            <option value="Strategist">Strategist</option>
+            <option value="Strategist_Shadow">Strategist Shadow</option>
+            <option value="support">Support</option>
+            <option value="Taijutsu">Taijutsu</option>
+            <option value="Toad">Toad</option>
+            <option value="weapon">Weapon</option>
+          </select>
+        </div>
+        <div class="villages-conteiner">
+          <div class="villages">
+            <label for="vilas">Vila</label>
+            <select name="vilas" id="select-villages">
+              <option value="">Vila</option>
+              <option value="cloud">Nuvem</option>
+              <option value="leaf">Folha</option>
+              <option value="mist">Água</option>
+              <option value="rain">Chuva</option>
+              <option value="rock">Pedra</option>
+              <option value="sand">Areia</option>
+              <option value="sound">Som</option>
+            </select>
+          </div>
           <div class="type-villages">
-            <select name="" id="select-type-villages">
+            <label for="typeVillages">Tipo da vila</label>
+            <select name="typeVillages" id="select-type-villages">
               <option value="normal">Normal</option>
               <option value="aka">Aka</option>
             </select>
           </div>
+
+
         </div>
       </div>
-      <div class="card-types">
-        <select name="" id="select-type-card">
-          <option value="shinobi">Ninja</option>
-          <option value="jutsu">Jutsu</option>
-          <option value="mission">Missão</option>
-          <option value="client">Cliente</option>
-        </select>
-      </div>
-      <div class="type-jutsu-container">
-        <select name="jutsu-type" id="jutsu-type">
-          <option value="ambush">Ambush</option>
-          <option value="Chakra Control">Chakra Control</option>
-          <option value="cliente">Cliente</option>
-          <option value="Genjutsu">Genjutsu</option>
-          <option value="hyoton">Hyoton</option>
-          <option value="insect">Insect</option>
-          <option value="mestre_de_marionetes">Mestre de Marionetes</option>
-          <option value="Mission">Mission</option>
-          <option value="Ninjutsu_Genjutsu">Ninjutsu e Genjutsu</option>
-          <option value="Ninjutsu">Ninjutsu</option>
-          <option value="Oil">Oil</option>
-          <option value="prepared">Prepared</option>
-          <option value="Quick">Quick</option>
-          <option value="Rage">Rage</option>
-          <option value="Sage">Sage</option>
-          <option value="samurai">Samurai</option>
-          <option value="Sand">Sand</option>
-          <option value="sensorial">Sensorial</option>
-          <option value="Shadow">Shadow</option>
-          <option value="shadow_clones">Shadow Clones</option>
-          <option value="Silent_Assasin">Silent Assasin</option>
-          <option value="Snake">Snake</option>
-          <option value="Speed">Speed</option>
-          <option value="Strategist">Strategist</option>
-          <option value="Strategist_Shadow">Strategist Shadow</option>
-          <option value="support">Support</option>
-          <option value="Taijutsu">Taijutsu</option>
-          <option value="Toad">Toad</option>
-          <option value="weapon">Weapon</option>
-        </select>
+
+      <div class="txtForm">
+        <div class="title-conteiner">
+          <div class="title-card">
+            <label for="titulo">Título</label>
+            <input type="text" name="titulo" id="title-card" placeholder="Título">
+          </div>
+
+          <div class="subtitle-card">
+            <label for="Tags">Tags</label>
+            <input type="text" name="Tags" id="subtitle-card" placeholder="Tags">
+          </div>
+
+          <div class="level-card">
+            <label for="level">Nível</label>
+            <input type="number" name="level" id="level-card" placeholder="Nível">
+          </div>
+        </div>
+
+        <div class="desc-container">
+          <div class="effect-container">
+            <div class="effect-title">
+              <label for="effect-title">Títudo do Efeito</label>
+              <input type="text" name="effect-title" id="effect-title" placeholder="Título do Efeito">
+            </div>
+            <div class="effect-desc">
+              <label for="effect-desc">Descrição</label>
+              <textarea name="effect-desc" id="effect-desc" rows="4" cols="33"
+                placeholder="Descrição do Efeito"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="jutsu-desc-form">
+          <div class="jutsu-header">
+            <label for="numJutsus">Número de Jutsus</label>
+            <input type="number" name="" id="number-jutsus" placeholder="N° de jutsus" max="2" min="0">
+          </div>
+          <div id="jutsu-desc-form" class="dyn-desc-jutsus">
+          </div>
+        </div>
+
       </div>
     </div>
-
-    <div class="txtForm">
-      <div class="title-conteiner">
-        <input type="text" name="" id="title-card" placeholder="Título">
-        <input type="text" name="" id="subtitle-card" placeholder="Tags">
-        <input type="number" name="" id="level-card" placeholder="Nível">
-
+    <div class="right-container">
+      <div class="imgTemplate">
+        <canvas id="myCanvas" style="width: 343px; height: 500px;">
+        </canvas>
+        <div id="preview">
+          <!-- <img src="elementos/fire" alt="" id="source"> -->
+        </div>
         <div class="container-image-select">
           <input type="text" id="txtFileName" readonly="true">
           <input type="file" id="inputFile" style="display: none;">
           <button id="openModalBtn">Selecionar Imagem</button>
         </div>
-
-        <div class="desc-container">
-          <div class="effect-container">
-            <input type="text" name="" id="effect-title" placeholder="Título do Efeito">
-            <textarea name="" id="effect-desc" cols="30" rows="2" placeholder="Descrição do Efeito"></textarea>
-          </div>
-        </div>
-
-        <div class="jutsu-desc-form">
-          <label for="numJutsus">Número de Jutsus</label>
-          <input type="number" name="" id="number-jutsus" placeholder="Número de jutsus" max="2" min="0">
-
-          <div id="jutsu-desc-form">
-          </div>
-        </div>
+        <button id="btnImgDowload"><a id="imagePreview"></a>Download</button>
       </div>
 
       <div class="atributtes-text">
-        <label for="intellige">Inteligencia:</label>
-        <input type="text" name="intellige" id="intelligeText" placeholder="Inteligencia">
-        <label for="speed">Velocidade:</label>
-        <input type="text" name="speed" id="speedText" placeholder="Velocidade">
-        <label for="atk">Ataque:</label>
-        <input type="text" name="atk" id="atkText" placeholder="Ataque">
-        <label for="def">Defesa:</label>
-        <input type="text" name="def" id="defText" placeholder="Defesa">
+        <div class="int-vel-container">
+          <label for="intellige">Inteligencia:</label>
+          <input type="text" name="intellige" id="intelligeText" placeholder="Inteligencia">
+          <label for="speed">Velocidade:</label>
+          <input type="text" name="speed" id="speedText" placeholder="Velocidade">
+        </div>
+        <div class="atk-def-container">
+          <label for="atk">Ataque:</label>
+          <input type="text" name="atk" id="atkText" placeholder="Ataque">
+          <label for="def">Defesa:</label>
+          <input type="text" name="def" id="defText" placeholder="Defesa">
+        </div>
       </div>
+
     </div>
+
   </div>
+
+
 
 
   <script>
@@ -663,32 +698,46 @@
 
       for (var i = 0; i < numberJutsus.value; i++) { //GRAVACAO
 
+        var containerDinamico = document.createElement('div')
+        containerDinamico.classList.add('containerJutsuDyn')
+
+        var divChakra = document.createElement('div')
+        divChakra.classList.add('desc-chakra-dyn')
+
         label1 = document.createElement('label')
         label1.for = `chakra-cost${i}`
-        label1.textContent = `Custo de Chakra do Jutsu ${i + 1}:`
+        label1.textContent = `Custo Jutsu ${i + 1}:`
 
         text1 = document.createElement('input')
         text1.type = 'text'
         text1.id = `chakra-cost${i}`
         text1.name = `chakra-cost${i}`
-        text1.placeholder = `Custo de Chakra do Jutsu ${i + 1}`
+        text1.placeholder = `Custo Jutsu ${i + 1}`
         listFieldJutsus.push(text1)
+
+        var divDescJutsu = document.createElement('div')
+        divDescJutsu.classList.add('desc-jutsu-dyn')
 
         label2 = document.createElement('label')
         label2.for = `jutsu-desc${i}`
-        label2.textContent = `Descriçado do Jutsu ${i + 1}:`
+        label2.textContent = `Descrição ${i + 1}`
 
         text2 = document.createElement('textarea')
         text2.type = 'text'
         text2.id = `jutsu-desc${i}`
         text2.name = `jutsu-desc${i}`
-        text2.placeholder = `Descrição do Jutsu ${i + 1}`
+        text2.placeholder = `Descrição ${i + 1}`
         listFieldJutsus.push(text2)
 
-        containerJutsusDesc.appendChild(label1)
-        containerJutsusDesc.appendChild(text1)
-        containerJutsusDesc.appendChild(label2)
-        containerJutsusDesc.appendChild(text2)
+        divChakra.appendChild(label1)
+        divChakra.appendChild(text1)
+        divDescJutsu.appendChild(label2)
+        divDescJutsu.appendChild(text2)
+
+        containerDinamico.appendChild(divChakra)
+        containerDinamico.appendChild(divDescJutsu)
+
+        containerJutsusDesc.appendChild(containerDinamico)
 
         text1.addEventListener('input', () => loadBGImage())
         text2.addEventListener('input', () => loadBGImage())
@@ -752,9 +801,7 @@
     })
 
 
-  </script>
 
-  <script>
 
   </script>
 </body>

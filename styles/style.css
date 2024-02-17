@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: #0f0f0f;
+}
+
+label {
+    font-size: small;
+}
+
+textarea {
+    background-color: transparent;
+    resize: vertical;
+    padding: 5px;
+    line-height: 1.5rem;
+    border: solid 1px #ffffffa2;
+    border-radius: 5px;
+    color: #ffffff;
+    outline: none;
+}
+
+textarea:focus {
+    border: solid 1px #ffffff;
+}
+
+input[type='text'],
+input[type='number'] {
+    display: block;
+    border: solid 1px #ffffffa2;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: transparent;
+    color: #ffffff;
+    outline: none;
+    width: 100%;
+}
+
+/*selects-container*/
+.container {
+    font-size: 1rem;
+    color: white;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    align-items: flex-start;
+    position: fixed;
+    gap: 15px;
+    background-color: #2d3037;
+    border-radius: 5px;
+    left: 25%;
+    top: 10%;
+    border: solid 0.5px #d1d1d1b0;
+}
+
+.container:focus {
+    border: #ff0000b0;
+}
+
+.left-container {
+    display: inline;
+    margin: 10px;
+}
+
+.selects-container {
+
+    border: solid 1px #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.selects-container .card-types {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    align-items: center;
+}
+
+.selects-container .type-jutsu-container {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    align-items: center;
+}
+
+.selects-container .villages-conteiner .villages {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    align-items: center;
+}
+
+.selects-container .villages-conteiner .type-villages {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    align-items: center;
+}
+
+.selects-container select {
+    display: block;
+    width: 100%;
+    border: solid 1px #ffffffa2;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: transparent;
+    color: #ffffff;
+    /*top right bottom left*/
+}
+
+.selects-container select option {
+    background: white;
+    color: #0f0f0f;
+}
+
+/*txtForm*/
+.txtForm {
+    display: grid;
+    grid-template-columns: 100%;
+    border: solid 1px #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.txtForm input:focus {
+    border: solid 1px #ffffff;
+    box-shadow: 0px 0px 2px rgb(255, 255, 255);
+}
+
+.txtForm ::placeholder {
+    color: #ffffff93;
+}
+
+.txtForm .title-conteiner {
+    display: grid;
+    margin-bottom: 10px;
+    gap: 5px;
+}
+
+.txtForm .title-conteiner .title-card {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    align-items: center;
+}
+
+.txtForm .title-conteiner .subtitle-card {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    align-items: center;
+}
+
+.txtForm .title-conteiner .level-card {
+    display: grid;
+    grid-template-columns: 25% 20%;
+    align-items: center;
+}
+
+.txtForm .desc-container .effect-container {
+    margin-bottom: 10px;
+}
+
+.txtForm .desc-container .effect-container .effect-title {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.txtForm .desc-container .effect-container .effect-desc {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    align-items: center;
+}
+
+.jutsu-desc-form .jutsu-header {
+    display: grid;
+    grid-template-columns: 50% 30%;
+    align-items: center;
+}
+
+.jutsu-desc-form .jutsu-desc-form {
+    display: inline-flex;
+}
+
+.jutsu-desc-form .dyn-desc-jutsus .desc-chakra-dyn {
+    display: grid;
+    grid-template-columns: 35% 30%;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.jutsu-desc-form .dyn-desc-jutsus .desc-jutsu-dyn {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    align-items: center;
+}
+
+.jutsu-desc-form .dyn-desc-jutsus .containerJutsuDyn {
+    border: solid 1px #ffffff;
+    border-radius: 5px;
+    padding: 5px;
+
+    margin-bottom: 5px;
+}
+
+.atributtes-text {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    border: solid 1px #ffffff;
+    border-radius: 5px;
+    padding: 10px;    
+    margin-bottom: 10px;
+}
+
+.int-vel-container {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.atk-def-container {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    align-items: center;
+}
+
+
+/*imgTemplate*/
+.imgTemplate {
+    display: flex;
+    border: solid 1px #ffffff;
+    border-radius: 10px;
+}
