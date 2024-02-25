@@ -150,7 +150,7 @@
             <div class="element-fields">
               <label for="select-element-1">Elemento 1</label>
               <select name="select-element-1" id="select-element-1">
-                <option value="earth">Nenhum</option>
+                <option value="">Nenhum</option>
                 <option value="earth">Terra</option>
                 <option value="fire">Fogo</option>
                 <option value="lightining">Luz</option>
@@ -162,7 +162,7 @@
             <div class="element-fields">
               <label for="select-element-2">Elemento 2</label>
               <select name="" id="select-element-2">
-                <option value="earth">Nenhum</option>
+                <option value="">Nenhum</option>
                 <option value="earth">Terra</option>
                 <option value="fire">Fogo</option>
                 <option value="lightining">Luz</option>
@@ -222,6 +222,8 @@
     const selectVillageType = document.getElementById('select-type-villages')
 
     const selectJutsuType = document.getElementById('jutsu-type')
+
+    const selectsElements = [document.getElementById('select-element-1'), document.getElementById('select-element-2')]
 
     // Obtendo uma referência para o botão pelo id
     const titleText = document.getElementById('title-card')
@@ -314,6 +316,16 @@
       return [x_img, y_img]
     }
 
+    function preDrawElements() {
+      coordYElement = 500
+      for (field of selectsElements) {
+        if (field.value != "") {
+          drawElements(field.value, coordYElement)
+          coordYElement -= 140
+        }
+      }
+    }
+
     function loadBGImage() {
 
       // Cria o canvas
@@ -326,6 +338,13 @@
       //Lines and TypeJutsu
       drawLines()
       coord_jutsu_type = drawJutsuType()
+
+      if (inputFile.value.trim() !== '') {
+        console.log(inputFile.value);
+        drawPerfilImg()
+      } else {
+        preDrawElements()
+      }
 
       //Card Level
       if (levelText.value != '') {
@@ -340,6 +359,13 @@
         }
       }
 
+    }
+
+    function drawElements(elementType, coordY) {
+      const elementImg = dicElementsType[elementType]
+      console.log(coordY);
+      const coords = calcCenterImg(elementImg)
+      ctx.drawImage(elementImg, coords[0] + 300, coords[1] - coordY)
     }
 
     function drawAtributtes(atk, def, int, vel, coord_jutsu_type) {
@@ -662,7 +688,22 @@
     }
 
     function loadElementsTypeImg() {
+      const optionsElements = selectsElements[0].options
+      const listElements = []
 
+      for (const elements of optionsElements) {
+        listElements.push(elements.value)
+      }
+
+      listElements.splice(0, 1)
+
+      for (const elements of listElements) {
+        imgElement = new Image()
+        imgElement.src = `elements/${elements}.png`
+
+        dicElementsType[elements] = imgElement
+      }
+      console.log(dicElementsType);
     }
 
     function drawJutsuType() {
@@ -728,6 +769,39 @@
       }
     }
 
+    function drawPerfilImg() {
+      var file = inputFile.files[0];
+
+      if (file) {
+        // Verifica se um arquivo foi selecionado
+        var reader = new FileReader();
+
+        reader.addEventListener('load',
+          () => {
+            var imageUrl = reader.result
+            txtFileName.value = file.name
+            const perfilImage = new Image()
+            perfilImage.src = imageUrl;
+
+            perfilImage.onload = function () {
+              // A imagem está totalmente carregada, agora podemos desenhá-la no canvas
+              // console.log(perfilImage.width);
+              coordCenter = calcCenterImg(perfilImage, perfilImage.height, perfilImage.width);
+              ctx.drawImage(perfilImage, 33, 33, y * 1.26, x * 1.38); //width, height
+
+              preDrawElements()
+            };
+
+            //preview.appendChild(perfilImage);
+
+
+          },
+          false,
+        );
+
+        reader.readAsDataURL(file)
+      }
+    }
 
     // Adicionando um ouvinte de evento de clique ao botão
     btnDowload.addEventListener('click', function () {
@@ -841,6 +915,10 @@
     selectVillageType.addEventListener('change', () => loadBGImage())
     selectCardType.addEventListener('change', () => loadBGImage())
 
+    for (field of selectsElements) {
+      field.addEventListener('change', () => loadBGImage())
+    }
+
     intelligeText.addEventListener('input', () => loadBGImage())
     speedText.addEventListener('input', () => loadBGImage())
     atkText.addEventListener('input', () => loadBGImage())
@@ -850,38 +928,7 @@
       inputFile.click()
     })
 
-    inputFile.addEventListener('change', () => {
-      var file = inputFile.files[0];
-
-      if (file) {
-        // Verifica se um arquivo foi selecionado
-        var reader = new FileReader();
-
-        reader.addEventListener('load',
-          () => {
-            var imageUrl = reader.result
-            txtFileName.value = file.name
-            const perfilImage = new Image()
-            perfilImage.src = imageUrl;
-
-            loadBGImage()
-            perfilImage.onload = function () {
-              // A imagem está totalmente carregada, agora podemos desenhá-la no canvas
-              // console.log(perfilImage.width);
-              coordCenter = calcCenterImg(perfilImage, perfilImage.height, perfilImage.width);
-              ctx.drawImage(perfilImage, 33, 33, y * 1.26, x * 1.38); //width, height
-            };
-
-            //preview.appendChild(perfilImage);
-
-
-          },
-          false,
-        );
-
-        reader.readAsDataURL(file)
-      }
-    })
+    inputFile.addEventListener('change', () => loadBGImage())
 
 
 
