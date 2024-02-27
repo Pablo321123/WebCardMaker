@@ -58,7 +58,7 @@
             <option value="weapon">Weapon</option>
           </select>
         </div>
-        <div class="villages-conteiner">
+        <div class="villages-conteiner" id="villageContainer">
           <div class="villages">
             <label for="vilas">Vila</label>
             <select name="vilas" id="select-villages">
@@ -96,15 +96,22 @@
             <input type="text" name="Tags" id="subtitle-card" placeholder="Tags">
           </div>
 
-          <div class="level-card">
+          <div class="level-card" id="containerLevelCard">
             <label for="level">Nível</label>
             <input type="number" name="level" id="level-card" placeholder="Nível">
           </div>
         </div>
 
         <div class="desc-container">
+          <div class="requisites-container displayNone" id="requisitesContainer">
+            <div class="requisite-desc">
+              <label for="requisite-desc">Descrição Req.</label>
+              <textarea name="requisite-desc" id="requisite-desc" rows="4" cols="33"
+                placeholder="Descrição do Requisito"></textarea>
+            </div>
+          </div>
           <div class="effect-container">
-            <div class="effect-title">
+            <div class="effect-title" id="effectTitle">
               <label for="effect-title">Títudo do Efeito</label>
               <input type="text" name="effect-title" id="effect-title" placeholder="Título do Efeito">
             </div>
@@ -116,7 +123,7 @@
           </div>
         </div>
 
-        <div class="jutsu-desc-form">
+        <div class="jutsu-desc-form" id="containerNumJustus">
           <div class="jutsu-header">
             <label for="numJutsus">Número de Jutsus</label>
             <input type="number" id="number-jutsus" placeholder="N° de jutsus" max="2" min="0">
@@ -181,7 +188,7 @@
       </div>
 
 
-      <div class="atributtes-text">
+      <div class="atributtes-text" id="atributtesContainer">
         <div class="int-vel-container">
           <label for="intellige">Inteligencia:</label>
           <input type="text" name="intellige" id="intelligeText" placeholder="Inteligencia">
@@ -231,6 +238,7 @@
     const levelText = document.getElementById('level-card')
     const effectTitleText = document.getElementById('effect-title')
     const effectDescTextA = document.getElementById('effect-desc')
+    const requisiteDescTextA = document.getElementById('requisite-desc')
     const numberJutsus = document.getElementById('number-jutsus')
     //const chakraCostText = document.getElementById('chakra-cost')
     //const jutsuDescTextA = document.getElementById('jutsu-desc')
@@ -346,13 +354,16 @@
         preDrawElements()
       }
 
-      //Card Level
-      if (levelText.value != '') {
-        drawLevelCard()
+      if (selectCardType.value.includes('shinobi')) {
+        drawVillage()
       }
 
       if ((selectCardType.value != 'mission')) {
-        drawVillage()
+
+        //Card Level
+        if (levelText.value != '') {
+          drawLevelCard()
+        }
 
         if (selectCardType.value.includes('client') || selectCardType.value.includes('shinobi')) {
           drawAtributtes(atkText.value, defText.value, intelligeText.value, speedText.value, coord_jutsu_type)
@@ -580,10 +591,26 @@
           const lineEffectDescSize = 25
           const yEffectDesc = y + 170
 
+          if (selectCardType.value === 'jutsu') {
+
+            ctx.font = 'bold 20px TrebuchetMSFamily'
+            ctx.fillStyle = 'black'
+            ctx.textAlign = "left"
+
+            var numLines = printAtWordWrap(requisiteDescTextA.value, effectTitleSize.width + 50, yEffectDesc, lineEffectDescSize, 600, 50)
+
+            //Subtitle Tags
+            ctx.font = 'Bold 25px TrebuchetMSFamily'
+            ctx.fillStyle = 'black'
+            ctx.textAlign = "left"
+            ctx.fillText('Efeito:', 50, yEffectDesc + (50 + (lineEffectDescSize * numLines)));
+          }
+
           ctx.font = 'bold 20px TrebuchetMSFamily'
           ctx.fillStyle = 'black'
           ctx.textAlign = "left"
-          var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, yEffectDesc, lineEffectDescSize, 600, 50)
+
+          var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 10, yEffectDesc + (50 + (lineEffectDescSize * numLines)), lineEffectDescSize, 600, 50)
           //ctx.fillText(effectDescTextA.value, effectTitleSize.width + 50, y + 160); //50 é margem inicial
 
 
@@ -803,6 +830,12 @@
       }
     }
 
+    function clearAtribute() {
+      atkText.value = '';
+      defText.value = '';
+      speedText.value = '';
+      intelligeText.value = '';
+    }
     // Adicionando um ouvinte de evento de clique ao botão
     btnDowload.addEventListener('click', function () {
       // Faz o download da imagem
@@ -909,11 +942,61 @@
     })
     effectDescTextA.addEventListener('input', () => loadBGImage())
 
+    requisiteDescTextA.addEventListener('input', () => loadBGImage())
+
     selectJutsuType.addEventListener('input', () => loadBGImage())
 
     selectVillage.addEventListener('change', () => loadBGImage())
     selectVillageType.addEventListener('change', () => loadBGImage())
-    selectCardType.addEventListener('change', () => loadBGImage())
+    selectCardType.addEventListener('change', () => {
+
+      const numJutsusContainer = document.getElementById('containerNumJustus')
+      const containerLevelCard = document.getElementById('containerLevelCard')
+      const atributtesContainer = document.getElementById('atributtesContainer')
+      const villageContainer = document.getElementById('villageContainer')
+      const requisitesContainer = document.getElementById('requisitesContainer')
+
+      const effectTitle = document.getElementById('effectTitle')
+
+      if (selectCardType.value === 'shinobi') {
+        numJutsusContainer.classList.remove('displayNone')
+        villageContainer.classList.remove('displayNone')
+      } else {
+        numJutsusContainer.classList.add('displayNone')
+        villageContainer.classList.add('displayNone')
+
+        selectVillage.value = ''
+        numberJutsus.dispatchEvent(new Event('change'));
+
+        numberJutsus.value = ''
+        numberJutsus.dispatchEvent(new Event('input'));
+      }
+
+      if (!selectCardType.value.includes('client') && !selectCardType.value.includes('shinobi')) {
+        atributtesContainer.classList.add('displayNone')
+        clearAtribute()
+      } else {
+        atributtesContainer.classList.remove('displayNone')
+      }
+
+      if (selectCardType.value === 'mission') {
+        containerLevelCard.classList.add('displayNone')
+      } else {
+        containerLevelCard.classList.remove('displayNone')
+      }
+
+      if (selectCardType.value === 'jutsu') {
+        requisitesContainer.classList.remove('displayNone')
+        effectTitle.classList.add('displayNone')
+      } else {
+        requisitesContainer.classList.add('displayNone')
+        effectTitle.classList.remove('displayNone')
+      }
+
+
+      loadBGImage()
+
+    })
 
     for (field of selectsElements) {
       field.addEventListener('change', () => loadBGImage())
@@ -929,11 +1012,8 @@
     })
 
     inputFile.addEventListener('change', () => loadBGImage())
-
-
-
-
   </script>
+
 </body>
 
 </html>

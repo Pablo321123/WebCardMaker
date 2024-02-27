@@ -164,6 +164,10 @@ input[type='number'] {
     align-items: center;
 }
 
+.txtForm .title-conteiner .level-card.displayNone {
+    display: none;
+}
+
 .txtForm .desc-container .effect-container {
     margin-bottom: 10px;
 }
@@ -180,6 +184,22 @@ input[type='number'] {
     grid-template-columns: 30% 70%;
     align-items: center;
 }
+
+.txtForm .desc-container .effect-container .effect-title.displayNone {
+    display: none;
+}
+
+.txtForm .requisite-desc {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    align-items: center;
+}
+
+.requisite-desc{
+    margin-bottom: 5px;
+}
+
+.jutsu-desc-form {}
 
 .jutsu-desc-form .jutsu-header {
     display: grid;
@@ -225,7 +245,6 @@ input[type='number'] {
     border: solid 1px #ffffff;
     border-radius: 10px;
     padding: 10px;
-    margin-bottom: 10px;
 }
 
 .int-vel-container {
@@ -243,7 +262,7 @@ input[type='number'] {
 
 
 .right-container {
-    margin: 15px 0 5px 0;
+    margin: 15px 0 15px 0;
 }
 
 /*imgTemplate*/
@@ -296,6 +315,6 @@ input[type='number'] {
     align-items: center;
 }
 
-.checkbox {
-    margin-top: 100px;
+.displayNone {
+    display: none;
 }
