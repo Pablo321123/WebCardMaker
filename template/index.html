@@ -598,6 +598,7 @@
             ctx.textAlign = "left"
 
             var numLines = printAtWordWrap(requisiteDescTextA.value, effectTitleSize.width + 50, yEffectDesc, lineEffectDescSize, 600, 50)
+            var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, yEffectDesc + (50 + (lineEffectDescSize * numLines)), lineEffectDescSize, 600, 50)
 
             //Subtitle Tags
             ctx.font = 'Bold 25px TrebuchetMSFamily'
@@ -609,8 +610,8 @@
           ctx.font = 'bold 20px TrebuchetMSFamily'
           ctx.fillStyle = 'black'
           ctx.textAlign = "left"
-
-          var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 10, yEffectDesc + (50 + (lineEffectDescSize * numLines)), lineEffectDescSize, 600, 50)
+          
+          var numLines = printAtWordWrap(effectDescTextA.value, effectTitleSize.width + 50, yEffectDesc, lineEffectDescSize, 600, 50)
           //ctx.fillText(effectDescTextA.value, effectTitleSize.width + 50, y + 160); //50 é margem inicial
 
 
